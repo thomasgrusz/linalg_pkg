@@ -1,4 +1,4 @@
-from math import sqrt
+from math import acos, degrees, sqrt
 
 
 class Vector(object):
@@ -47,6 +47,28 @@ class Vector(object):
 
         except ZeroDivisionError:
             raise Exception("Cannot normalize the zero vector")
+
+    def dot(self, other):
+        dot_product_full = sum(
+            [c1 * c2 for c1, c2 in zip(self.coordinates, other.coordinates)]
+        )
+        return round(dot_product_full, 3)
+
+    def angle_with(self, other, rad=True):
+        try:
+            v1 = self.normalized()
+            v2 = other.normalized()
+            angle_rads = acos(v1.dot(v2))
+            if rad:
+                return round(angle_rads, 3)
+            else:
+                return round(degrees(angle_rads), 3)
+
+        except Exception as e:
+            if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception("Cannot compute an angle with the zero vector")
+            else:
+                raise e
 
     def __repr__(self):
         return f"Vector: {self.coordinates}"

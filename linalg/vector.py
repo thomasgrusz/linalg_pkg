@@ -1,3 +1,6 @@
+import math
+
+
 class Vector(object):
     def __init__(self, coordinates):
         try:
@@ -32,6 +35,14 @@ class Vector(object):
             )
         else:
             return Vector([round(c * other, 3) for c in self.coordinates])
+
+    def magnitude(self):
+        sum_of_squares = sum([c ** 2 for c in self.coordinates])
+        return round(math.sqrt(sum_of_squares), 3)
+
+    def unitvector(self):
+        magnitude = self.magnitude()
+        return Vector([round(c / magnitude, 3) for c in self.coordinates])
 
     def __repr__(self):
         return f"Vector: {self.coordinates}"

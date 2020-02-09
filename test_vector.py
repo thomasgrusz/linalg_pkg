@@ -10,6 +10,7 @@ class TestVectorClass(unittest.TestCase):
     def setUp(self):
         self.v1 = Vector([8.218, -9.341])
         self.v2 = Vector([-1.129, 2.111])
+        self.v3 = Vector([8.218, -9.341])
         self.scalar = 7.41
         self.added = self.v1 + self.v2
         self.subtracted = self.v1 - self.v2
@@ -43,7 +44,15 @@ class TestVectorClass(unittest.TestCase):
     def test_magnitude(self):
         self.assertEqual(self.v1.magnitude(), 12.441, "incorrect magnitude")
 
-    def test_unitvector(self):
+    def test_normalized(self):
         self.assertEqual(
-            self.v1.unitvector().coordinates, (0.661, -0.751), "incorrect unit vecotr"
+            self.v1.normalized().coordinates, (0.661, -0.751), "incorrect unit vector"
         )
+
+    def test_repr(self):
+        self.assertEqual(
+            self.v1.__repr__(), "Vector: (8.218, -9.341)", "incorrect string"
+        )
+
+    def test_equal(self):
+        self.assertEqual(self.v1.__eq__(self.v3), True, "vectors are not equal")

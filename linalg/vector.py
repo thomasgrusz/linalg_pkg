@@ -1,4 +1,4 @@
-import math
+from math import sqrt
 
 
 class Vector(object):
@@ -38,11 +38,15 @@ class Vector(object):
 
     def magnitude(self):
         sum_of_squares = sum([c ** 2 for c in self.coordinates])
-        return round(math.sqrt(sum_of_squares), 3)
+        return round(sqrt(sum_of_squares), 3)
 
-    def unitvector(self):
-        magnitude = self.magnitude()
-        return Vector([round(c / magnitude, 3) for c in self.coordinates])
+    def normalized(self):
+        try:
+            magnitude = self.magnitude()
+            return self * (1.0 / magnitude)
+
+        except ZeroDivisionError:
+            raise Exception("Cannot normalize the zero vector")
 
     def __repr__(self):
         return f"Vector: {self.coordinates}"

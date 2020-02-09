@@ -40,3 +40,10 @@ class TestVectorClass(unittest.TestCase):
             "incorrect subtraction",
         )
 
+    def test_magnitude(self):
+        self.assertEqual(self.v1.magnitude(), 12.441, "incorrect magnitude")
+
+    def test_unitvector(self):
+        self.assertEqual(
+            self.v1.unitvector().coordinates, (0.661, -0.751), "incorrect unit vecotr"
+        )

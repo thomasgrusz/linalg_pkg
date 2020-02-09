@@ -2,6 +2,9 @@ from math import acos, degrees, sqrt
 
 
 class Vector(object):
+
+    CANNOT_NORMALIZE_ZERO_VECTOR_MSG = "Cannot normalize the zero vector"
+
     def __init__(self, coordinates):
         try:
             if not coordinates:

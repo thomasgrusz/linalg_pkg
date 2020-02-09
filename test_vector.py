@@ -49,6 +49,17 @@ class TestVectorClass(unittest.TestCase):
             self.v1.normalized().coordinates, (0.661, -0.751), "incorrect unit vector"
         )
 
+    def test_dot(self):
+        self.assertEqual(self.v1.dot(self.v2), -28.997, "incorrect dot product")
+
+    def test_angle_with(self):
+        self.assertEqual(
+            self.v1.angle_with(self.v2, rad=True), 2.913, "incorrect angle"
+        )
+        self.assertEqual(
+            self.v1.angle_with(self.v2, rad=False), 166.906, "incorrect angle"
+        )
+
     def test_repr(self):
         self.assertEqual(
             self.v1.__repr__(), "Vector: (8.218, -9.341)", "incorrect string"

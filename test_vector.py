@@ -10,33 +10,26 @@ class TestVectorClass(unittest.TestCase):
     def setUp(self):
         self.v1 = Vector([8.218, -9.341])
         self.v2 = Vector([-1.129, 2.111])
-        self.v3 = Vector([8.218, -9.341])
-        self.scalar = 7.41
-        self.added = self.v1 + self.v2
-        self.subtracted = self.v1 - self.v2
-        self.multiplied = self.v1 * self.v2
-        self.scalar_multiplied = self.v1 * 7.41
+        self.v3 = self.v1
 
     def test_initialization(self):
         self.assertEqual(self.v1.coordinates, (8.218, -9.341), "incorrect coordinates")
         self.assertEqual(self.v1.dimension, 2, "incorrect dimension")
 
     def test_add(self):
+        self.added = self.v1 + self.v2
         self.assertEqual(self.added.coordinates, (7.089, -7.23), "incorrect summation")
 
     def test_subract(self):
+        self.subtracted = self.v1 - self.v2
         self.assertEqual(
             self.subtracted.coordinates, (9.347, -11.452), "incorrect subtraction"
         )
 
-    def test_multiply(self):
+    def test_times_scalar(self):
+        self.multiplied_with_scalar = self.v1.times_scalar(7.41)
         self.assertEqual(
-            self.multiplied.coordinates, (-9.278, -19.719), "incorrect subtraction"
-        )
-
-    def test_scalarmultiply(self):
-        self.assertEqual(
-            self.scalar_multiplied.coordinates,
+            self.multiplied_with_scalar.coordinates,
             (60.895, -69.217),
             "incorrect subtraction",
         )
@@ -46,7 +39,7 @@ class TestVectorClass(unittest.TestCase):
 
     def test_normalized(self):
         self.assertEqual(
-            self.v1.normalized().coordinates, (0.661, -0.751), "incorrect unit vector"
+            self.v1.normalized().coordinates, (0.661, -0.751), "incorrect normalization"
         )
 
     def test_dot(self):
@@ -60,9 +53,9 @@ class TestVectorClass(unittest.TestCase):
             self.v1.angle_with(self.v2, rad=False), 166.906, "incorrect angle"
         )
 
-    def test_repr(self):
+    def test_str(self):
         self.assertEqual(
-            self.v1.__repr__(), "Vector: (8.218, -9.341)", "incorrect string"
+            self.v1.__str__(), "Vector: (8.218, -9.341)", "incorrect string"
         )
 
     def test_equal(self):

@@ -28,16 +28,8 @@ class Vector(object):
             [round(c1 - c2, 3) for c1, c2 in zip(self.coordinates, other.coordinates)]
         )
 
-    def __mul__(self, other):
-        if isinstance(other, Vector):
-            return Vector(
-                [
-                    round(c1 * c2, 3)
-                    for c1, c2 in zip(self.coordinates, other.coordinates)
-                ]
-            )
-        else:
-            return Vector([round(c * other, 3) for c in self.coordinates])
+    def times_scalar(self, other):
+        return Vector([round(c * other, 3) for c in self.coordinates])
 
     def magnitude(self):
         sum_of_squares = sum([c ** 2 for c in self.coordinates])
@@ -46,10 +38,9 @@ class Vector(object):
     def normalized(self):
         try:
             magnitude = self.magnitude()
-            return self * (1.0 / magnitude)
-
+            return self.times_scalar(1.0 / magnitude)
         except ZeroDivisionError:
-            raise Exception("Cannot normalize the zero vector")
+            raise Exception(self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG)
 
     def dot(self, other):
         dot_product_full = sum(
@@ -73,7 +64,7 @@ class Vector(object):
             else:
                 raise e
 
-    def __repr__(self):
+    def __str__(self):
         return f"Vector: {self.coordinates}"
 
     def __eq__(self, v):

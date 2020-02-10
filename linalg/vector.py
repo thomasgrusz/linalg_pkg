@@ -1,4 +1,7 @@
-from math import acos, degrees, sqrt
+from math import acos, degrees, pi, sqrt
+from decimal import Decimal, getcontext
+
+getcontext().prec = 30
 
 
 class Vector(object):
@@ -9,7 +12,7 @@ class Vector(object):
         try:
             if not coordinates:
                 raise ValueError
-            self.coordinates = tuple(coordinates)
+            self.coordinates = tuple([Decimal(x) for x in coordinates])
             self.dimension = len(coordinates)
 
         except ValueError:
@@ -18,45 +21,38 @@ class Vector(object):
         except TypeError:
             raise TypeError("The coordinates must be an iterable!")
 
-    def __add__(self, other):
-        return Vector(
-            [round(c1 + c2, 3) for c1, c2 in zip(self.coordinates, other.coordinates)]
-        )
+    def __add__(self, v):
+        return Vector([x + y for x, y in zip(self.coordinates, v.coordinates)])
 
-    def __sub__(self, other):
-        return Vector(
-            [round(c1 - c2, 3) for c1, c2 in zip(self.coordinates, other.coordinates)]
-        )
+    def __sub__(self, v):
+        return Vector([x - y for x, y in zip(self.coordinates, v.coordinates)])
 
-    def times_scalar(self, other):
-        return Vector([round(c * other, 3) for c in self.coordinates])
+    def times_scalar(self, c):
+        return Vector([x * Decimal(c) for x in self.coordinates])
 
     def magnitude(self):
-        sum_of_squares = sum([c ** 2 for c in self.coordinates])
-        return round(sqrt(sum_of_squares), 3)
+        sum_of_squares = sum([x ** 2 for x in self.coordinates])
+        return Decimal(sqrt(sum_of_squares))
 
     def normalized(self):
         try:
             magnitude = self.magnitude()
-            return self.times_scalar(1.0 / magnitude)
+            return self.times_scalar(Decimal(1.0) / magnitude)
         except ZeroDivisionError:
             raise Exception(self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG)
 
-    def dot(self, other):
-        dot_product_full = sum(
-            [c1 * c2 for c1, c2 in zip(self.coordinates, other.coordinates)]
-        )
-        return round(dot_product_full, 3)
+    def dot(self, v):
+        return sum([x * y for x, y in zip(self.coordinates, v.coordinates)])
 
-    def angle_with(self, other, rad=True):
+    def angle_with(self, v, rad=True):
         try:
-            v1 = self.normalized()
-            v2 = other.normalized()
-            angle_rads = acos(v1.dot(v2))
+            u1 = self.normalized()
+            u2 = v.normalized()
+            angle_in_rads = acos(u1.dot(u2))
             if rad:
-                return round(angle_rads, 3)
+                return Decimal(angle_in_rads)
             else:
-                return round(degrees(angle_rads), 3)
+                return Decimal(angle_in_rads * 180.0 / pi)
 
         except Exception as e:
             if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
@@ -64,8 +60,9 @@ class Vector(object):
             else:
                 raise e
 
-    def __str__(self):
-        return f"Vector: {self.coordinates}"
+    def __repr__(self):
+        coordinates = [round(float(x), 3) for x in self.coordinates]
+        return f"Vector: {coordinates}"
 
     def __eq__(self, v):
         return self.coordinates == v.coordinates

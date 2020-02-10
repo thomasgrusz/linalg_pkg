@@ -50,9 +50,9 @@ class Vector(object):
             u2 = v.normalized()
             angle_in_rads = acos(u1.dot(u2))
             if rad:
-                return Decimal(angle_in_rads)
+                return angle_in_rads
             else:
-                return Decimal(angle_in_rads * 180.0 / pi)
+                return angle_in_rads * 180.0 / pi
 
         except Exception as e:
             if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:

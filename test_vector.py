@@ -18,6 +18,8 @@ class TestVectorClass(unittest.TestCase):
         self.v5 = Vector([-1.821, 1.072, -2.94])
         self.v6 = Vector([-7.579, -7.88])  # parallel to v7
         self.v7 = Vector([22.737, 23.64])
+        self.v8 = Vector([8.462, 7.893, -8.187])
+        self.v9 = Vector([6.984, -5.975, 4.778])
 
     def test_initialization(self):
         self.assertEqual(
@@ -148,6 +150,30 @@ class TestVectorClass(unittest.TestCase):
             "Vector: (Decimal('8.217999999999999971578290569595992565155029296875'), Decimal('-9.3409999999999993036681189551018178462982177734375'))",
             "incorrect string representation",
         )
+
+    def test_cross(self):
+        cross_vector1 = (
+            Decimal("-11.2045709999999977337168388658"),
+            Decimal("-97.6094439999999908463337305875"),
+            Decimal("-105.685161999999993914045148813"),
+        )
+        self.assertEqual(
+            self.v8.cross(self.v9).coordinates, cross_vector1, "incorrect cross vector"
+        )
+
+        cross_vector2 = (
+            Decimal("-0E-51"),
+            Decimal("0E-51"),
+            Decimal("6.8022090000000024155504263490"),
+        )
+        self.assertEqual(
+            self.v1.cross(self.v2).coordinates, cross_vector2, "incorrect crossvector"
+        )
+
+        # Catch an expected error message
+        # self.v10 = Vector([1])
+        # with self.assertRaises(ValueError):
+        #     self.v10.cross(self.v10)
 
     def test_str(self):
         self.assertEqual(

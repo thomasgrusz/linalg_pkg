@@ -76,17 +76,6 @@ class Vector(object):
             or self.angle_with(v) == pi
         )
 
-    def component_orthogonal_to(self, basis):
-        try:
-            projection = self.component_parallel_to(basis)
-            return self - projection
-
-        except Exception as e:
-            if str(e) == self.NO_UNIQUE_PARALLEL_COMPONENT_MSG:
-                raise Exception(self.NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
-            else:
-                raise e
-
     def component_parallel_to(self, basis):
         try:
             u = basis.normalized()
@@ -99,7 +88,21 @@ class Vector(object):
             else:
                 raise e
 
+    def component_orthogonal_to(self, basis):
+        try:
+            projection = self.component_parallel_to(basis)
+            return self - projection
+
+        except Exception as e:
+            if str(e) == self.NO_UNIQUE_PARALLEL_COMPONENT_MSG:
+                raise Exception(self.NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
+            else:
+                raise e
+
     def __repr__(self):
+        return f"Vector: {self.coordinates}"
+
+    def __str__(self):
         coordinates = [round(float(x), 3) for x in self.coordinates]
         return f"Vector: {coordinates}"
 

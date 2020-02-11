@@ -14,9 +14,9 @@ class TestVectorClass(unittest.TestCase):
         self.v1 = Vector([8.218, -9.341])
         self.v2 = Vector([-1.129, 2.111])
         self.v3 = Vector([8.218, -9.341])
-        self.v4 = Vector([-2.328, -7.284, -1.214])
+        self.v4 = Vector([-2.328, -7.284, -1.214])  # orthogonal to v5
         self.v5 = Vector([-1.821, 1.072, -2.94])
-        self.v6 = Vector([-7.579, -7.88])
+        self.v6 = Vector([-7.579, -7.88])  # parallel to v7
         self.v7 = Vector([22.737, 23.64])
 
     def test_initialization(self):
@@ -120,9 +120,38 @@ class TestVectorClass(unittest.TestCase):
             "incorrect, these vectors are parallel to each other",
         )
 
+    def test_component_parallel_to(self):
+        coordinates = (
+            Decimal("5.71240614001628270254847253295"),
+            Decimal("-10.6810357498444410491684908966"),
+        )
+        self.assertEqual(
+            self.v1.component_parallel_to(self.v2).coordinates,
+            coordinates,
+            "incorrect parallel component vector",
+        )
+
+    def test_component_orthogonal_to(self):
+        coordinates = (
+            Decimal("2.50559385998371726902981803665"),
+            Decimal("1.34003574984444174550037194150"),
+        )
+        self.assertEqual(
+            self.v1.component_orthogonal_to(self.v2).coordinates,
+            coordinates,
+            "incorrect orthogonal component vector",
+        )
+
     def test_repr(self):
         self.assertEqual(
-            self.v1.__repr__(), "Vector: [8.218, -9.341]", "incorrect string"
+            self.v1.__repr__(),
+            "Vector: (Decimal('8.217999999999999971578290569595992565155029296875'), Decimal('-9.3409999999999993036681189551018178462982177734375'))",
+            "incorrect string representation",
+        )
+
+    def test_str(self):
+        self.assertEqual(
+            self.v1.__str__(), "Vector: [8.218, -9.341]", "incorrect string"
         )
 
     def test_equal(self):

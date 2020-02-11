@@ -9,6 +9,7 @@ class Vector(object):
     CANNOT_NORMALIZE_ZERO_VECTOR_MSG = "Cannot normalize the zero vector"
     NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG = "No unique orthogonal component"
     NO_UNIQUE_PARALLEL_COMPONENT_MSG = "No unique parallel component"
+    ONLY_DEFINED_IN_TWO_THREE_DIMS_MSG = "Only defined in two or three dimensions"
 
     def __init__(self, coordinates):
         try:
@@ -96,6 +97,31 @@ class Vector(object):
         except Exception as e:
             if str(e) == self.NO_UNIQUE_PARALLEL_COMPONENT_MSG:
                 raise Exception(self.NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
+            else:
+                raise e
+
+    def cross(self, v):
+        try:
+            x_1, y_1, z_1 = self.coordinates
+            x_2, y_2, z_2 = v.coordinates
+            new_coordinates = [
+                y_1 * z_2 - y_2 * z_1,
+                -(x_1 * z_2 - x_2 * z_1),
+                x_1 * y_2 - x_2 * y_1,
+            ]
+            return Vector(new_coordinates)
+
+        except ValueError as e:
+            msg = str(e)
+            if msg == "not enough values to unpack (expected 3, got 2)":
+                self_embedded_in_R3 = Vector(self.coordinates + ("0",))
+                v_embedded_in_R3 = Vector(v.coordinates + ("0",))
+                return self_embedded_in_R3.cross(v_embedded_in_R3)
+            elif (
+                msg == "too many values to unpack (expected 3)"
+                or msg == "not enough values to unpack (expected 3, got 1)"
+            ):
+                raise Exception(self.ONLY_DEFINED_IN_TWO_THREE_DIMS_MSG)
             else:
                 raise e
 

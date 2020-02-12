@@ -125,6 +125,13 @@ class Vector(object):
             else:
                 raise e
 
+    def area_of_parallelogram_with(self, v):
+        cross_product = self.cross(v)
+        return cross_product.magnitude()
+
+    def area_of_triangle_with(self, v):
+        return self.area_of_parallelogram_with(v) / Decimal("2.0")
+
     def __repr__(self):
         return f"Vector: {self.coordinates}"
 

@@ -6,6 +6,7 @@ from math import pi, sqrt
 from decimal import Decimal, getcontext
 from linalg.vector import Vector
 
+# Set precision level for Decimals class
 getcontext().prec = 30
 
 

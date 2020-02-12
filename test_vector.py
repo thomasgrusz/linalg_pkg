@@ -13,12 +13,10 @@ class TestVectorClass(unittest.TestCase):
     def setUp(self):
         self.v1 = Vector([8.218, -9.341])
         self.v2 = Vector([-1.129, 2.111])
-        self.v4 = Vector([-2.328, -7.284, -1.214])  # orthogonal to v5
-        self.v5 = Vector([-1.821, 1.072, -2.94])
-        self.v6 = Vector([-7.579, -7.88])  # parallel to v7
-        self.v7 = Vector([22.737, 23.64])
-        self.v8 = Vector([8.462, 7.893, -8.187])
-        self.v9 = Vector([6.984, -5.975, 4.778])
+
+    def tearDown(self):
+        del self.v1
+        del self.v2
 
     def test_initialization(self):
         self.assertEqual(
@@ -32,7 +30,10 @@ class TestVectorClass(unittest.TestCase):
         self.added = self.v1 + self.v2
         self.assertEqual(
             self.added.coordinates,
-            ((Decimal(8.218) + Decimal(-1.129)), (Decimal(-9.341) + Decimal(2.111))),
+            (
+                Decimal("7.08899999999999996802557689080"),
+                Decimal("-7.22999999999999909405801190587"),
+            ),
             "incorrect summation",
         )
 
@@ -40,30 +41,35 @@ class TestVectorClass(unittest.TestCase):
         self.subtracted = self.v1 - self.v2
         self.assertEqual(
             self.subtracted.coordinates,
-            ((Decimal(8.218) - Decimal(-1.129)), (Decimal(-9.341) - Decimal(2.111))),
+            (
+                Decimal("9.34699999999999997513100424840"),
+                Decimal("-11.4519999999999995132782260043"),
+            ),
             "incorrect subtraction",
         )
 
     def test_times_scalar(self):
-        self.multiplied_with_scalar = self.v1.times_scalar(7.41)
         self.assertEqual(
-            self.multiplied_with_scalar.coordinates,
-            ((Decimal(8.218) * Decimal(7.41)), (Decimal(-9.341) * Decimal(7.41))),
+            self.v1.times_scalar(7.41).coordinates,
+            (
+                Decimal("60.8953800000000009572431736160"),
+                Decimal("-69.2168099999999961676167004043"),
+            ),
             "incorrect subtraction",
         )
 
     def test_magnitude(self):
         self.assertEqual(
             self.v1.magnitude(),
-            ((Decimal(8.218) ** 2) + (Decimal(-9.341) ** 2)) ** Decimal(0.5),
+            Decimal("12.4414550997863584511084615581"),
             "incorrect magnitude",
         )
 
     def test_normalized(self):
-        magnitude = ((Decimal(8.218) ** 2) + (Decimal(-9.341) ** 2)) ** Decimal(0.5)
-        scalar = Decimal(1.0) / magnitude
-
-        normalized_coordinates = ((Decimal(8.218) * scalar), (Decimal(-9.341) * scalar))
+        normalized_coordinates = (
+            Decimal("0.660533670224885303647492786689"),
+            Decimal("-0.750796424138555996928631643652"),
+        )
         self.assertEqual(
             self.v1.normalized().coordinates,
             normalized_coordinates,
@@ -71,27 +77,26 @@ class TestVectorClass(unittest.TestCase):
         )
 
     def test_dot(self):
-        dot_product = (Decimal(8.218) * Decimal(-1.129)) + (
-            Decimal(-9.341) * Decimal(2.111)
-        )
+        dot_product = Decimal("-28.9969730000000004851195001266")
+        # dot_product = (Decimal(8.218) * Decimal(-1.129)) + (
+        #     Decimal(-9.341) * Decimal(2.111)
+        # )
         self.assertEqual(self.v1.dot(self.v2), dot_product, "incorrect dot product")
 
     def test_angle_with(self):
-
-        angle_in_rads = 2.9111755112971575698566084611229598522186279296875
-        angle_in_degrees = angle_in_rads * 180.0 / pi
-
+        angle_in_rads = 2.9111755112971576
         self.assertEqual(
             self.v1.angle_with(self.v2, rad=True), angle_in_rads, "incorrect angle"
         )
+        angle_in_degrees = angle_in_rads * 180.0 / pi
         self.assertEqual(
             self.v1.angle_with(self.v2, rad=False), angle_in_degrees, "incorrect angle"
         )
 
     def test_is_zero(self):
-        self.zero_vector = Vector([0, 0, 0])
+        zero_vector = Vector([0, 0, 0])
         self.assertEqual(
-            self.zero_vector.is_zero(), True, "incorrect, this is a zero vector"
+            zero_vector.is_zero(), True, "incorrect, this is a zero vector"
         )
         self.assertEqual(
             self.v1.is_zero(), False, "incorrect, this is NOT a zero vector"
@@ -99,14 +104,16 @@ class TestVectorClass(unittest.TestCase):
 
     def test_is_orthogonal_to(self):
         self.assertEqual(
-            self.v4.is_orthogonal_to(self.v5),
-            True,
-            "incorrect result, these vectors are orthogonal to each other",
-        )
-        self.assertEqual(
             self.v1.is_orthogonal_to(self.v2),
             False,
             "incorrect, these vectors are not orthogonal to each other",
+        )
+        v3 = Vector([-2.328, -7.284, -1.214])  # orthogonal to v4
+        v4 = Vector([-1.821, 1.072, -2.94])
+        self.assertEqual(
+            v3.is_orthogonal_to(v4),
+            True,
+            "incorrect result, these vectors are orthogonal to each other",
         )
 
     def test_is_parallel_to(self):
@@ -115,8 +122,10 @@ class TestVectorClass(unittest.TestCase):
             False,
             "incorrect, these vectors are NOT parallel to eaach other",
         )
+        v5 = Vector([-7.579, -7.88])  # parallel to v6
+        v6 = Vector([22.737, 23.64])
         self.assertEqual(
-            self.v6.is_parallel_to(self.v7),
+            v5.is_parallel_to(v6),
             True,
             "incorrect, these vectors are parallel to each other",
         )
@@ -144,28 +153,30 @@ class TestVectorClass(unittest.TestCase):
         )
 
     def test_cross(self):
-        cross_vector1 = (
-            Decimal("-11.2045709999999977337168388658"),
-            Decimal("-97.6094439999999908463337305875"),
-            Decimal("-105.685161999999993914045148813"),
-        )
-        self.assertEqual(
-            self.v8.cross(self.v9).coordinates, cross_vector1, "incorrect cross vector"
-        )
-
-        cross_vector2 = (
+        # Test case with 2D-vector when 3D-vectors is expected
+        cross_product1 = (
             Decimal("-0E-51"),
             Decimal("0E-51"),
             Decimal("6.8022090000000024155504263490"),
         )
         self.assertEqual(
-            self.v1.cross(self.v2).coordinates, cross_vector2, "incorrect crossvector"
+            self.v1.cross(self.v2).coordinates, cross_product1, "incorrect crossvector"
         )
-
-        # Catch an expected error message
-        self.v10 = Vector([1])
+        # Normal case with 3D-vectors
+        cross_product2 = (
+            Decimal("-11.2045709999999977337168388658"),
+            Decimal("-97.6094439999999908463337305875"),
+            Decimal("-105.685161999999993914045148813"),
+        )
+        v7 = Vector([8.462, 7.893, -8.187])
+        v8 = Vector([6.984, -5.975, 4.778])
+        self.assertEqual(
+            v7.cross(v8).coordinates, cross_product2, "incorrect cross vector"
+        )
+        # Catch an expected error message if vector is 1D or > 3D
+        v9 = Vector([1])
         with self.assertRaises(Exception):
-            self.v10.cross(self.v10)
+            v9.cross(v9)
 
     def test_repr(self):
         self.assertEqual(

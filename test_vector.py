@@ -13,7 +13,6 @@ class TestVectorClass(unittest.TestCase):
     def setUp(self):
         self.v1 = Vector([8.218, -9.341])
         self.v2 = Vector([-1.129, 2.111])
-        self.v3 = Vector([8.218, -9.341])
         self.v4 = Vector([-2.328, -7.284, -1.214])  # orthogonal to v5
         self.v5 = Vector([-1.821, 1.072, -2.94])
         self.v6 = Vector([-7.579, -7.88])  # parallel to v7
@@ -144,13 +143,6 @@ class TestVectorClass(unittest.TestCase):
             "incorrect orthogonal component vector",
         )
 
-    def test_repr(self):
-        self.assertEqual(
-            self.v1.__repr__(),
-            "Vector: (Decimal('8.217999999999999971578290569595992565155029296875'), Decimal('-9.3409999999999993036681189551018178462982177734375'))",
-            "incorrect string representation",
-        )
-
     def test_cross(self):
         cross_vector1 = (
             Decimal("-11.2045709999999977337168388658"),
@@ -171,9 +163,16 @@ class TestVectorClass(unittest.TestCase):
         )
 
         # Catch an expected error message
-        # self.v10 = Vector([1])
-        # with self.assertRaises(ValueError):
-        #     self.v10.cross(self.v10)
+        self.v10 = Vector([1])
+        with self.assertRaises(Exception):
+            self.v10.cross(self.v10)
+
+    def test_repr(self):
+        self.assertEqual(
+            self.v1.__repr__(),
+            "Vector: (Decimal('8.217999999999999971578290569595992565155029296875'), Decimal('-9.3409999999999993036681189551018178462982177734375'))",
+            "incorrect string representation",
+        )
 
     def test_str(self):
         self.assertEqual(
@@ -181,4 +180,8 @@ class TestVectorClass(unittest.TestCase):
         )
 
     def test_equal(self):
-        self.assertEqual(self.v1.__eq__(self.v3), True, "vectors are not equal")
+        self.assertEqual(self.v1.__eq__(self.v1), True, "vectors are not equal")
+
+
+if __name__ == "__main__":
+    unittest.main()

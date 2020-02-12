@@ -178,6 +178,26 @@ class TestVectorClass(unittest.TestCase):
         with self.assertRaises(Exception):
             v9.cross(v9)
 
+    def test_area_of_parallelogram_with(self):
+        v7 = Vector([8.462, 7.893, -8.187])
+        v8 = Vector([6.984, -5.975, 4.778])
+        magnitude_of_cross_product = Decimal("144.300032696633225246124302074")
+        self.assertEqual(
+            v7.area_of_parallelogram_with(v8),
+            magnitude_of_cross_product,
+            "incorrect area of parallelogram",
+        )
+
+    def test_area_of_triangle_with(self):
+        v7 = Vector([8.462, 7.893, -8.187])
+        v8 = Vector([6.984, -5.975, 4.778])
+        area_of_triangle = Decimal("144.300032696633225246124302074") / Decimal("2.0")
+        self.assertEqual(
+            v7.area_of_triangle_with(v8),
+            area_of_triangle,
+            "incorrect area of triangle",
+        )
+
     def test_repr(self):
         self.assertEqual(
             self.v1.__repr__(),

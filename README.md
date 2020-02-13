@@ -4,6 +4,8 @@ _A simple linear algebra package written in Python 3_
 
 This is a more or less direct implementation of the **Udacity** [Linear Algebra Refresher Course](https://www.udacity.com/course/linear-algebra-refresher-course--ud953).
 
+---
+
 ## Installation
 
 **linalg_simple** is available from the Python Package Index [PyPi](https://pypi.org).
@@ -13,6 +15,8 @@ If you have Python 3 installed on your system you can use the `pip install` comm
 pip install linalg_simple
 ```
 
+---
+
 ## Classes
 
 The linalg_simple package currently offers the `Vector()` class, which can directly be imported into your project with:
@@ -21,9 +25,20 @@ The linalg_simple package currently offers the `Vector()` class, which can direc
 from linalg import Vector
 ```
 
-## Vector Methods
+---
 
-The following methods are available:
+## Vector Class
+
+### _Attributes_
+
+The `Vector()` class has two attributes:
+
+- `Vector.coordinates` (Decimal object)
+- `Vector.dimension` (int)
+
+### _Methods_
+
+The following `Vector()` class methods are available:
 
 ### Constructor
 

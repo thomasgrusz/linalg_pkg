@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="linalg_simple",
-    version="0.0.1",
+    version="0.0.3",
     author="Thomas Grusz",
     author_email="thomas.grusz@gmail.com",
     description="Simple Linear Algebra Package",

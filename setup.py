@@ -1,3 +1,5 @@
+# This file is needed by Python's setuptools for local installation from the pypi.org index (pip install linalg_simple)
+
 from setuptools import setup
 
 with open("README.md", "r") as fh:

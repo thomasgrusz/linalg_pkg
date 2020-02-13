@@ -9,6 +9,9 @@ class Vector(object):
 
     """Vector class for storing vectors and calculating basic vector operations
     
+    Args:
+        coordinates (int, float)
+
     Attributes:
         coordinates (Decimal)
         dimensions (int)
@@ -76,7 +79,7 @@ class Vector(object):
             None
         
         Returns:
-            Decimal - magnitude (length) of the vector
+            Decimal object - magnitude (length) of the vector
         """
         sum_of_squares = sum([x ** 2 for x in self.coordinates])
         return (sum_of_squares) ** Decimal(0.5)
@@ -103,7 +106,7 @@ class Vector(object):
             Vector object
         
         Returns:
-            Decimal - dot product of two vectors
+            Decimal object - dot product of two vectors
         """
         return sum([x * y for x, y in zip(self.coordinates, v.coordinates)])
 
@@ -136,8 +139,7 @@ class Vector(object):
         """Function to check, if a vector's magnitude is zero
 
         Args:
-            float - cut off point to correct for precision errors
-
+            tolerance (float) - cut off point to correct for precision errors
         
         Returns:
             bool - whether the vector is zero or not
@@ -149,7 +151,7 @@ class Vector(object):
 
         Args:
             Vector object
-            bool - cut off poiont to correct for precision errors
+            tolerance (bool) - cut off poiont to correct for precision errors
         
         Returns:
             bool - whether the vectors are orthogonal to each other
@@ -176,10 +178,10 @@ class Vector(object):
         """Function to calculate the projection of a vector onto a basis vector
 
         Args:
-            Vector object - the basis vector
+            Vector object - basis vector
         
         Returns:
-            vector object - projection vector (parallel component)
+            vector object - projection vector (parallel component of vector)
         """
         try:
             u = basis.normalized()
@@ -196,10 +198,10 @@ class Vector(object):
         """Function to calculate the orthogonal component of a vector
 
         Args:
-            Vector object - the basis vector
+            Vector object - basis vector
         
         Returns:
-            Vector object - orthogonal component vector
+            Vector object - orthogonal vector component
         """
         try:
             projection = self.component_parallel_to(basis)
@@ -218,7 +220,7 @@ class Vector(object):
             Vector object
         
         Returns:
-            Vector object - the cross product is a vector
+            Vector object - cross product
         """
         try:
             x_1, y_1, z_1 = self.coordinates
@@ -254,7 +256,7 @@ class Vector(object):
             Vector object
         
         Returns:
-            Decimal - area of parallelogram (length of cross product)
+            Decimal object - area of parallelogram (length of cross product)
         """
         cross_product = self.cross(v)
         return cross_product.magnitude()
@@ -267,7 +269,7 @@ class Vector(object):
             Vector object
         
         Returns:
-            Decimal - area of triangle
+            Decimal object - area of triangle (half length of cross product)
         """
         return self.area_of_parallelogram_with(v) / Decimal("2.0")
 
